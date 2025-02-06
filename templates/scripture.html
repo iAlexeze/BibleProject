@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book }} {{ chapter }} - EveryDay Bible App</title>
+    <link rel="icon" type="image/jpg" href="static/logo.jpg" sizes="196x196">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            color: #2d6a4f;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .button {
+            background-color: #2d6a4f;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #40916c;
+        }
+        .section {
+            margin-top: 20px;
+        }
+        .verse {
+            margin: 15px 0;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        .verse-number {
+            font-weight: bold;
+            color: #2d6a4f;
+        }
+        .verse-text {
+            margin-left: 10px;
+        }
+        .play-all-button {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .play-all-button:hover {
+            background-color: #357abd;
+        }
+        .play-icon {
+            font-size: 1.2em;
+        }
+        .dropdown-container {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .dropdown {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+        .dropdown:hover {
+            border-color: #4a90e2;
+        }
+        .dropdown:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ddd;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ book }} {{ chapter }} - {{ translation | upper }} Translation</h1>
+
+        <!-- Translation Dropdown -->
+        <div class="dropdown-container">
+            <label for="translation"></label>
+            <select name="translation" id="translation" class="dropdown" required>
+                <option value="" disabled selected>Switch Translation</option>
+                <!-- Translations will be populated here by JavaScript -->
+            </select>
+        </div>
+
+        <hr>
+
+        <!-- Play/Pause All Button -->
+        <button id="playAllButton" class="play-all-button">
+            <span id="playIcon" class="play-icon">▶</span>
+            <span id="playText">Play All</span>
+        </button>
+
+        <div class="section">
+            {% if verses %}
+                {% for verse in verses %}
+                    <div class="verse">
+                        <span class="verse-number">{{ verse['verse'] }}:</span>
+                        <span class="verse-text">{{ verse['text'] }}</span>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No verses found for this chapter.</p>
+            {% endif %}
+        </div>
+
+        <a href="/" class="button">Back to Homepage</a>
+    </div>
+
+    <script>
+        // Speech synthesis state management
+        let isPlayingAll = false;
+        let currentVerseIndex = 0;
+        let utterances = [];
+        let lastPlayedVerseIndex = -1;
+
+        // Function for the speakVerse function
+        function speakVerse(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 1;
+                utterance.pitch = 1;
+
+                // Add event listeners for verse completion
+                utterance.onend = function() {
+                    if (isPlayingAll) {
+                        currentVerseIndex++;
+                        if (currentVerseIndex < utterances.length) {
+                            window.speechSynthesis.speak(utterances[currentVerseIndex]);
+                        } else {
+                            stopPlayingAll();
+                        }
+                    }
+                    // Track the last played verse
+                    lastPlayedVerseIndex = currentVerseIndex;
+                };
+
+                utterances.push(utterance);
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Your browser does not support text-to-speech.");
+            }
+        }
+
+        // Function to play all verses
+        function playAll() {
+            if (!isPlayingAll) {
+                isPlayingAll = true;
+                utterances = [];
+
+                // Get all verses from the page
+                const verses = document.querySelectorAll('.verse-text');
+
+                // Start from where we left off, or from the beginning if this is the first time
+                const startIndex = lastPlayedVerseIndex === -1 ? 0 : lastPlayedVerseIndex;
+
+                // Play all verses starting from the last played index
+                for (let i = startIndex; i < verses.length; i++) {
+                    speakVerse(verses[i].textContent);
+                }
+
+                // Update button appearance
+                document.getElementById('playIcon').textContent = '⏸';
+                document.getElementById('playText').textContent = 'Pause';
+            } else {
+                stopPlayingAll();
+            }
+        }
+
+        // Function to stop playing all verses
+        function stopPlayingAll() {
+            isPlayingAll = false;
+            window.speechSynthesis.cancel();
+            utterances = [];
+         //   currentVerseIndex = 0;
+
+            // Reset button appearance
+            document.getElementById('playIcon').textContent = '▶';
+            document.getElementById('playText').textContent = 'Play All';
+        }
+
+        // Initialize play all button
+        document.getElementById('playAllButton').addEventListener('click', playAll);
+
+        // Add this initialization code right after your existing script functions
+        window.onload = function() {
+            // Call fetchTranslations immediately when the page loads
+            fetchTranslations();
+        };
+
+        // Modify your existing fetchTranslations function to include error handling
+        async function fetchTranslations() {
+            try {
+                const response = await fetch('/translations');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const translations = await response.json();
+                const translationSelect = document.getElementById('translation');
+
+                // Clear existing options except the placeholder
+                translationSelect.innerHTML = '<option value="" disabled selected>Switch Translation</option>';
+
+                translations.forEach((translation) => {
+                    const option = document.createElement('option');
+                    option.value = translation.identifier;
+                    option.textContent = translation.name;
+                    translationSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error fetching translations:', error);
+                // Show error to user
+                const translationSelect = document.getElementById('translation');
+                translationSelect.innerHTML = '<option value="" disabled>Error loading translations</option>';
+            }
+        }
+
+        // Replace the existing translationSelect event listener with this updated version
+        document.addEventListener('DOMContentLoaded', () => {
+            stopPlayingAll();
+            const translationSelect = document.getElementById('translation');
+
+            function getCurrentUrlParams() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return {
+                    book: urlParams.get('book'),
+                    chapter: urlParams.get('chapter')
+                };
+            }
+
+            translationSelect.addEventListener('change', async (event) => {
+                const { book, chapter } = getCurrentUrlParams();
+
+                // Create new URL with updated translation
+                const baseUrl = '/read';
+                const params = new URLSearchParams({
+                    translation: event.target.value,
+                    book,
+                    chapter
+                });
+
+                // Navigate to the new URL
+                window.location.href = `${baseUrl}?${params.toString()}`;
+            });
+        });
+    </script>
+</body>
+</html>

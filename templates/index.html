@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EveryDay Bible App</title>
+    <link rel="icon" type="image/jpg" href="static/logo.jpg" sizes="196x196">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2d6a4f;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .text-section {
+            max-width: 60%;
+        }
+        .image-section img {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 10px;
+        }
+        .dropdown {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .button {
+            background-color: #2d6a4f;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+        .button:hover {
+            background-color: #40916c;
+        }
+        .section {
+            margin-top: 20px;
+        }
+        .dropdown-container {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Text Section -->
+        <div class="text-section">
+            <h1>Welcome to EveryDay Bible App</h1>
+            <p>Start your spiritual journey by reading scripture in various translations.</p>
+
+            <div class="section">
+                <h2>Read the Scripture</h2>
+                <form action="/read" method="get">
+                    <!-- Translation Dropdown -->
+                    <div class="dropdown-container">
+                        <label for="translation">Translation</label>
+                        <select name="translation" id="translation" class="dropdown" required>
+                            <option value="" disabled selected>Select a translation</option>
+                            <!-- Translations will be populated here by JavaScript -->
+                        </select>
+                    </div>
+
+                    <!-- Book Dropdown -->
+                    <div class="dropdown-container">
+                        <label for="book">Book</label>
+                        <select name="book" id="book" class="dropdown" required>
+                            <option value="" disabled selected>Select a book</option>
+                            <!-- Books will be populated here by JavaScript -->
+                        </select>
+                    </div>
+
+                    <!-- Chapter Dropdown -->
+                    <div class="dropdown-container">
+                        <label for="chapter">Chapter</label>
+                        <select name="chapter" id="chapter" class="dropdown" required>
+                            <option value="" disabled selected>Select a chapter</option>
+                            <!-- Chapters will be populated here by JavaScript -->
+                        </select>
+                    </div>
+
+                    <button type="submit" class="button">Get Scripture</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Image Section -->
+        <div class="image-section">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Person reading the Bible">
+        </div>
+    </div>
+
+    <script>
+        // Fetch available translations, books, and chapters dynamically
+        async function fetchTranslations() {
+            const response = await fetch('/translations');
+            const translations = await response.json();
+            const translationSelect = document.getElementById('translation');
+            translations.forEach((translation) => {
+                const option = document.createElement('option');
+                option.value = translation.identifier;  // Use the identifier as the value
+                option.textContent = translation.name;  // Use the name as the displayed text
+                translationSelect.appendChild(option);
+            });
+        }
+
+        async function fetchBooks(translation) {
+            const response = await fetch(`/books?translation=${translation}`);
+            const books = await response.json();
+            const bookSelect = document.getElementById('book');
+            bookSelect.innerHTML = '<option value="" disabled selected>Select a book</option>';
+            books.forEach((book) => {
+                const option = document.createElement('option');
+                option.value = book;  // Use the book name as the value
+                option.textContent = book;  // Display the book name
+                bookSelect.appendChild(option);
+            });
+        }
+
+       async function fetchChapters(book, translation) {
+        const response = await fetch(`/chapters?book=${book}&translation=${translation}`);
+        const chapters = await response.json();
+
+        const chapterSelect = document.getElementById('chapter');
+        chapterSelect.innerHTML = '<option value="" disabled selected>Select a chapter</option>';
+
+        if (Array.isArray(chapters) && chapters.length > 0) {
+            chapters.forEach((chapterString) => {
+                const option = document.createElement('option');
+                option.value = chapterString;
+                option.textContent = `Chapter ${chapterString}`;
+                chapterSelect.appendChild(option);
+            });
+        } else {
+            const option = document.createElement('option');
+            option.textContent = "No chapters available";
+            chapterSelect.appendChild(option);
+        }
+    }
+
+
+        // Load the translation options when the page loads
+        window.onload = fetchTranslations;
+
+        // Event listener to fetch books based on selected translation
+        document.getElementById('translation').addEventListener('change', (event) => {
+            const translation = event.target.value;
+            fetchBooks(translation);
+        });
+
+        // Event listener to fetch chapters based on selected book and translation
+        document.getElementById('book').addEventListener('change', (event) => {
+            const book = event.target.value;
+            const translation = document.getElementById('translation').value;
+            fetchChapters(book, translation);
+        });
+    </script>
+
+</body>
+</html>

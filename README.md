@@ -169,17 +169,17 @@ If you prefer using **Docker Compose**, use the following commands:
 
 1. **Build and start the container**:
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 
 2. **Run in detached mode**:
    ```bash
-   docker-compose up -d --build
+   docker compose up -d --build
    ```
 
 3. **Stop the containers**:
    ```bash
-   docker-compose down
+   docker compose down
    ```
 4. **Access the Application**:
     

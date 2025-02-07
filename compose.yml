@@ -4,11 +4,11 @@ services:
     container_name: "everydaybible"
     restart: always
     environment:
-      - PORT=1804
+      - PORT=2323
     ports:
-      - "1804:1804"
+      - "2323:2323"
     healthcheck:
-      test: [ "CMD", "nc", "-z", "localhost", "1804" ]
+      test: [ "CMD", "nc", "-z", "localhost", "2323" ]
       interval: 10s
       timeout: 5s
       retries: 3

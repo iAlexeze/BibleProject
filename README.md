@@ -125,7 +125,7 @@ If you prefer using **Docker Compose**, use the following commands:
 
 2. **Run in detached mode**:
    ```bash
-   docker-compose up -d
+   docker-compose up -d --build
    ```
 
 3. **Stop the containers**:

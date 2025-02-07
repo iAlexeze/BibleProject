@@ -30,7 +30,7 @@ cd everydaybible
 ### **Create the Virtual Environment**
 Run the following command in your terminal or command prompt:  
 ```sh
-python -m venv everydaybible
+python3 -m venv everydaybible
 ```
 This will create a folder named **everydaybible** containing the virtual environment.
 
@@ -87,7 +87,7 @@ export PORT=2323  # Or any other port you prefer
 To run the app locally, simply execute the following command:
 
 ```bash
-python main.py
+gunicorn --workers 2 main:app
 ```
 
 The app will be available at `http://localhost:2323` (or the port you specified).

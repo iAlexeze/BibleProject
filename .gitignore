@@ -3,3 +3,4 @@ app.log
 *.log
 .env
 everydaybible/
+__pycache__/

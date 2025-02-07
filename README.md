@@ -19,15 +19,64 @@ The **EverydayBible App** is a simple Flask web application that allows users to
 1. **Python 3.7+**  
 2. **pip** (Python package installer)
 
-### Install Dependencies
+### Clone the Repository
 Clone the repository and install the required Python dependencies.
 
 ```bash
-git clone https://github.com/yourusername/everydaybible.git
+git clone https://github.com/iAlexeze/everydaybible.git
 cd everydaybible
-pip install -r requirements.txt
+```
+---
+### **Create the Virtual Environment**
+Run the following command in your terminal or command prompt:  
+```sh
+python -m venv everydaybible
+```
+This will create a folder named **everydaybible** containing the virtual environment.
+
+---
+### Activate the Virtual Environment
+The activation command depends on your operating system:
+
+#### **On Windows (CMD)**
+```sh
+everydaybible\Scripts\activate
 ```
 
+#### n Windows (PowerShell)
+```powershell
+everydaybible\Scripts\Activate.ps1
+```
+> ⚠️ If you get a security error, run this first:  
+> ```powershell
+> Set-ExecutionPolicy Unrestricted -Scope Process
+> ```
+
+#### On macOS/Linux
+```sh
+source everydaybible/bin/activate
+```
+
+---
+
+### Confirm Activation
+Once activated, your terminal prompt should show `(everydaybible)`, indicating that the virtual environment is active.
+
+To verify, run:
+```sh
+python --version
+pip --version
+```
+These should point to the versions inside the `everydaybible` environment.
+
+---
+
+### Install Dependencies
+Install dependencies using:
+```sh
+pip install -r requirements.txt
+```
+---
 ### Set Up Environment Variables
 The app uses an environment variable `PORT` to set the port for the Flask app. You can set it as follows:
 ```bash

@@ -1,0 +1,20 @@
+services:
+  everydaybible:
+    build: .
+    container_name: "everydaybible"
+    restart: always
+    environment:
+      - PORT=1804
+    ports:
+      - "1804:1804"
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "1804" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - "everydaybible"
+
+networks:
+  everydaybible:
+    name: everydaybible

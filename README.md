@@ -108,7 +108,7 @@ You can deploy the app using Docker.
    ```
 2. **Run the container**:
    ```bash
-   docker run -e PORT=2323 -p 2323:5000 everydaybible
+   docker run -e PORT=2323 -p 2323:2323 everydaybible
    ```
 3. **Access the Application**:
     

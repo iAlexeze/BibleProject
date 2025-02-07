@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ### Set Up Environment Variables
 The app uses an environment variable `PORT` to set the port for the Flask app. You can set it as follows:
 ```bash
-export PORT=5000  # Or any other port you prefer
+export PORT=2323  # Or any other port you prefer
 ```
 
 ### Run the App
@@ -41,7 +41,7 @@ To run the app locally, simply execute the following command:
 python main.py
 ```
 
-The app will be available at `http://localhost:5000` (or the port you specified).
+The app will be available at `http://localhost:2323` (or the port you specified).
 
 ---
 
@@ -134,7 +134,13 @@ If you prefer using **Docker Compose**, use the following commands:
    ```
 4. **Access the Application**:
     
-You can access the application on http://localhost:2323
+You can access the application on http://localhost:2323. `2323` is the default port specified in the [compose.yml](compose.yml) file as shown:
+   ```bash
+    environment:
+      - PORT=2323       # You can use any port number of your choice
+    ports:
+      - "2323:2323"
+   ```
 
 ---
 

@@ -159,11 +159,31 @@ window.location.href = url.toString();
 
 // Add event listeners to the buttons
 document.getElementById('prevChapter').addEventListener('click', function (e) {
-e.preventDefault(); // Prevent the default link behavior
-updateChapter(-1); // Decrease the chapter by 1
+    e.preventDefault(); // Prevent the default link behavior
+    updateChapter(-1); // Decrease the chapter by 1
 });
 
 document.getElementById('nextChapter').addEventListener('click', function (e) {
-e.preventDefault(); // Prevent the default link behavior
-updateChapter(1); // Increase the chapter by 1
+    e.preventDefault(); // Prevent the default link behavior
+    updateChapter(1); // Increase the chapter by 1
+});
+
+document.getElementById('backToHomepage').addEventListener('click', () => {
+    stopPlayingAll();
+});
+
+// Call stopPlayingAll on page load
+window.addEventListener('load', () => {
+    stopPlayingAll();
+});
+
+// Listen for browser back/forward navigation
+window.addEventListener('popstate', () => {
+    stopPlayingAll();
+});
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        stopPlayingAll();
+    }
 });

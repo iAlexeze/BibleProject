@@ -1,2 +1,4 @@
 app.log
-.idea
+.idea/
+*.log
+.env

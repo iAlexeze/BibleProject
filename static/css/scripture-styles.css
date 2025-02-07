@@ -1,0 +1,135 @@
+/* CSS setup for scripture.html */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+h1 {
+    color: #2d6a4f;
+    margin-bottom: 20px;
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.button {
+    background-color: #2d6a4f;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+.button:hover {
+    background-color: #40916c;
+}
+.section {
+    margin-top: 20px;
+}
+.verse {
+    margin: 15px 0;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+.verse-number {
+    font-weight: bold;
+    color: #2d6a4f;
+}
+.verse-text {
+    margin-left: 10px;
+}
+.play-all-button {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s ease;
+}
+.play-all-button:hover {
+    background-color: #357abd;
+}
+.play-icon {
+    font-size: 1.2em;
+}
+.dropdown-container {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.dropdown {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+.dropdown:hover {
+    border-color: #4a90e2;
+}
+.dropdown:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 20px 0;
+}
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.navigation-buttons .button {
+    flex: 1;
+    margin: 0 5px;
+    text-align: center;
+    background-color: #2d6a4f; /* Default button color */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.navigation-buttons .button:hover {
+    background-color: #40916c; /* Default hover color */
+}
+
+/* Style for the "Back to Homepage" button */
+.navigation-buttons .button:not(.prev-next-button) {
+    background-color: #2d6a4f; /* Keep the original color */
+}
+
+/* Style for the "Previous Chapter" and "Next Chapter" buttons */
+.navigation-buttons .prev-next-button {
+    background-color: transparent; /* Make the background transparent */
+    color: #2d6a4f; /* Change text color to match the theme */
+    border: 2px solid #2d6a4f; /* Add a border for better visibility */
+}
+
+.navigation-buttons .prev-next-button:hover {
+    background-color: rgba(45, 106, 79, 0.1); /* Slight hover effect */
+    color: #2d6a4f; /* Keep text color consistent */
+}
